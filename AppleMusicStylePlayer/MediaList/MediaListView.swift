@@ -11,7 +11,7 @@ import SwiftUI
 struct MediaListView: View {
     @Environment(PlayListController.self) var model
     @Environment(NowPlayingController.self) var player
-    @Environment(\.nowPlayingExpandedBinding) var expandedBinding
+    @Environment(\.nowPlayingExpandedBinding) var expandedBinding: Binding<Bool>
     @Environment(\.nowPlayingExpandProgress) var expandProgress
 
     var body: some View {
@@ -84,7 +84,7 @@ private extension MediaListView {
         HStack(spacing: 16) {
             Button {
                 player.onPlayPause()
-                expandedBinding?.wrappedValue = true
+                expandedBinding.wrappedValue = true
             } label: {
                 Label("Play", systemImage: "play.fill")
             }

@@ -24,12 +24,12 @@ extension EnvironmentValues {
         set { self[NowPlayingExpandProgressEnvironmentKey.self] = newValue }
     }
 
-    var nowPlayingExpandedBinding: Binding<Bool>? {
+    var nowPlayingExpandedBinding: Binding<Bool> {
         get { self[NowPlayingExpandedBindingKey.self] }
         set { self[NowPlayingExpandedBindingKey.self] = newValue }
     }
 }
 
 private struct NowPlayingExpandedBindingKey: EnvironmentKey {
-    static let defaultValue: Binding<Bool>? = nil
+    static let defaultValue: Binding<Bool> = .constant(false)
 }
