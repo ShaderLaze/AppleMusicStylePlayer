@@ -33,6 +33,11 @@ struct CompactNowPlaying: View {
                 },
                 onEnded: {
                     model.onPlayPause()
+                    if model.state == .playing {
+                        withAnimation(.playerExpandAnimation) {
+                            expanded = true
+                        }
+                    }
                 }
             )
             .playerButtonStyle(.miniPlayer)
