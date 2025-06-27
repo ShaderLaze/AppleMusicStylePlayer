@@ -84,6 +84,11 @@ private struct UniversalOverlayModifier<ViewContent: View>: ViewModifier {
                     removeView()
                 }
             }
+            .onChange(of: properties.window != nil, initial: true) { _, newValue in
+                if newValue && show {
+                    addView()
+                }
+            }
     }
 
     private func addView() {
