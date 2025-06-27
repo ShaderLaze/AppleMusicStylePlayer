@@ -11,5 +11,7 @@ struct Media {
     let artwork: URL?
     let title: String
     let subtitle: String?
+    /// Local file URL for offline items
+    let fileURL: URL?
     let online: Bool
 }
