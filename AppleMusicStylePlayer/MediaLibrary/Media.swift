@@ -11,5 +11,8 @@ struct Media {
     let artwork: URL?
     let title: String
     let subtitle: String?
+    /// Local or remote audio file location
+    let url: URL?
+    /// Indicates whether the audio should be streamed
     let online: Bool
 }

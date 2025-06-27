@@ -32,6 +32,12 @@ class PlayListController {
     func selectFirstAvailable() {
         current = library.list.first { !$0.items.isEmpty }
     }
+
+    /// Imports an audio file into the library and updates the current playlist
+    func importTrack(_ url: URL) {
+        library.addTrack(from: url)
+        selectFirstAvailable()
+    }
 }
 
 private extension MediaList {

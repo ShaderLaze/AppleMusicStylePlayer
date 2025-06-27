@@ -11,5 +11,6 @@ struct MediaList {
     let artwork: URL?
     let title: String
     let subtitle: String?
-    let items: [Media]
+    /// Mutable array of tracks in the list
+    var items: [Media]
 }
