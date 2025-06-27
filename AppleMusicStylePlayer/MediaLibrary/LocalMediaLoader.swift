@@ -39,13 +39,22 @@ final class LocalMediaLoader: NSObject, UIDocumentPickerDelegate {
             let title = metadata.first(where: { $0.commonKey == .commonKeyTitle })?.stringValue ?? url.deletingPathExtension().lastPathComponent
             let artist = metadata.first(where: { $0.commonKey == .commonKeyArtist })?.stringValue
             var artworkURL: URL?
+            var artworkImage: UIImage?
             if let data = metadata.first(where: { $0.commonKey == .commonKeyArtwork })?.dataValue {
+                artworkImage = UIImage(data: data)
                 let tmp = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString + ".png")
                 try? data.write(to: tmp)
                 artworkURL = tmp
             }
 
-            return Media(artwork: artworkURL, title: title, subtitle: artist, online: false, fileURL: url)
+            return Media(
+                artwork: artworkURL,
+                artworkImage: artworkImage,
+                title: title,
+                subtitle: artist,
+                online: false,
+                fileURL: url
+            )
         }
     }
 }

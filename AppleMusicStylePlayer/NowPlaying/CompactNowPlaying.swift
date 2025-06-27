@@ -7,6 +7,7 @@
 
 import Kingfisher
 import SwiftUI
+import UIKit
 
 struct CompactNowPlaying: View {
     @Environment(NowPlayingController.self) var model
@@ -68,8 +69,7 @@ private extension CompactNowPlaying {
     @ViewBuilder
     var artwork: some View {
         if !hideArtworkOnExpanded || !expanded {
-            KFImage.url(model.display.artwork)
-                .resizable()
+            ArtworkImage(url: model.display.artwork, image: model.display.artworkImage)
                 .aspectRatio(contentMode: .fill)
                 .background(Color(UIColor.systemGray4))
                 .clipShape(.rect(cornerRadius: 7))

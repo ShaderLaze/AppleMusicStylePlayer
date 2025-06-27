@@ -7,6 +7,7 @@
 
 import Kingfisher
 import SwiftUI
+import UIKit
 
 struct RegularNowPlaying: View {
     @Environment(NowPlayingController.self) var model
@@ -55,8 +56,7 @@ private extension RegularNowPlaying {
         GeometryReader {
             let size = $0.size
             let small = model.state == .paused
-            KFImage.url(model.display.artwork)
-                .resizable()
+            ArtworkImage(url: model.display.artwork, image: model.display.artworkImage)
                 .aspectRatio(contentMode: .fill)
                 .background(Color(UIColor.palette.playerCard.artworkBackground))
                 .clipShape(RoundedRectangle(cornerRadius: expanded ? 10 : 5, style: .continuous))

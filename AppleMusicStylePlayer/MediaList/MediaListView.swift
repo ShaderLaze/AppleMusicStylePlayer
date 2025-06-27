@@ -7,6 +7,7 @@
 
 import Kingfisher
 import SwiftUI
+import UIKit
 
 struct MediaListView: View {
     @Environment(PlayListController.self) var model
@@ -53,8 +54,7 @@ private extension MediaListView {
     var header: some View {
         VStack(spacing: 0) {
             let border = UIScreen.hairlineWidth
-            KFImage.url(model.display.artwork)
-                .resizable()
+            ArtworkImage(url: model.display.artwork, image: nil)
                 .aspectRatio(contentMode: .fill)
                 .background(Color(.palette.artworkBackground))
                 .clipShape(.rect(cornerRadius: 10))
@@ -109,6 +109,7 @@ private extension MediaListView {
                     }
                     MediaItemView(
                         artwork: item.artwork,
+                        artworkImage: item.artworkImage,
                         title: item.title,
                         subtitle: item.subtitle,
                         divider: isLastItem ? .long : .short
@@ -150,6 +151,7 @@ struct MediaItemView: View {
     }
 
     let artwork: URL?
+    let artworkImage: UIImage?
     let title: String
     let subtitle: String?
     let divider: DividerType
@@ -158,8 +160,7 @@ struct MediaItemView: View {
         VStack(spacing: 0) {
             HStack(spacing: 12) {
                 let border = UIScreen.hairlineWidth
-                KFImage.url(artwork)
-                    .resizable()
+                ArtworkImage(url: artwork, image: artworkImage)
                     .frame(width: 48, height: 48)
                     .aspectRatio(contentMode: .fill)
                     .background(Color(.palette.artworkBackground))

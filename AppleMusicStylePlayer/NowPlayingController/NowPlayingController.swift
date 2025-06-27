@@ -125,10 +125,15 @@ private extension NowPlayingController {
     }
 
     func updateColors() {
+        if let image = display.artworkImage {
+            colors = image.dominantColorFrequencies(with: .high) ?? []
+            return
+        }
+
         guard let url = display.artwork else { return }
         Task { @MainActor in
             if let image = try? await KingfisherManager.shared.retrieveImage(with: url).image {
-                self.colors = (image.dominantColorFrequencies(with: .high) ?? [])
+                self.colors = image.dominantColorFrequencies(with: .high) ?? []
             }
         }
     }
@@ -147,6 +152,7 @@ private extension Media {
     static var placeholder: Self {
         Media(
             artwork: nil,
+            artworkImage: nil,
             title: "---",
             subtitle: "---",
             online: false,
