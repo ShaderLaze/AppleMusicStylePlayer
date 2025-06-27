@@ -12,6 +12,7 @@ import SwiftUI
 class PlayListController {
     var library = MediaLibrary()
     var current: MediaList?
+    private(set) var userTracks: [URL] = []
 
     init() {
         selectFirstAvailable()
@@ -31,6 +32,12 @@ class PlayListController {
 
     func selectFirstAvailable() {
         current = library.list.first { !$0.items.isEmpty }
+    }
+
+    func importTracks(from urls: [URL]) {
+        userTracks.append(contentsOf: urls)
+        library.addMedia(from: urls)
+        selectFirstAvailable()
     }
 }
 

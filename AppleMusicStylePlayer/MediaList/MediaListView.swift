@@ -7,10 +7,12 @@
 
 import Kingfisher
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct MediaListView: View {
     @Environment(PlayListController.self) var model
     @Environment(\.nowPlayingExpandProgress) var expandProgress
+    @State private var showImporter = false
 
     var body: some View {
         NavigationStack {
@@ -21,13 +23,30 @@ struct MediaListView: View {
             .contentMargins(.bottom, ViewConst.tabbarHeight, for: .scrollIndicators)
             .background(Color(.palette.appBackground(expandProgress: expandProgress)))
             .toolbar {
-                Button {
-                    print("Profile tapped")
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button("Import") {
+                        showImporter = true
+                    }
+                    Button {
+                        print("Profile tapped")
+                    }
+                    label: {
+                        Image(systemName: "person.crop.circle")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundStyle(Color(.palette.brand))
+                    }
                 }
-                label: {
-                    Image(systemName: "person.crop.circle")
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(Color(.palette.brand))
+            }
+            .fileImporter(
+                isPresented: $showImporter,
+                allowedContentTypes: [.audio],
+                allowsMultipleSelection: true
+            ) { result in
+                switch result {
+                case .success(let urls):
+                    model.importTracks(from: urls)
+                case .failure(let error):
+                    print(error.localizedDescription)
                 }
             }
         }
