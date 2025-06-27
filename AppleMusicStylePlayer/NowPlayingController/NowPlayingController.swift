@@ -62,11 +62,17 @@ class NowPlayingController {
     func onPlayPause() {
         enshureMediaAvailable()
         guard let currentMedia else { return }
-        state.toggle()
-        if state == .playing {
+        switch state {
+        case .paused:
             player.play(currentMedia)
-        } else {
-            player.stop()
+            state = .playing
+        case .playing:
+            if currentMedia.online {
+                player.stop()
+            } else {
+                player.pause()
+            }
+            state = .paused
         }
     }
 
