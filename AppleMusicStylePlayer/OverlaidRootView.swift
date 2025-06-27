@@ -43,6 +43,10 @@ struct OverlaidRootView: View {
             }
         }
         .environment(\.nowPlayingExpandProgress, nowPlayingExpandProgress)
+        .environment(\.expandNowPlaying) {
+            showOverlayingNowPlayng = true
+            expandedNowPlaying = true
+        }
     }
 
     func showNowPlayng(replacement: Bool) {

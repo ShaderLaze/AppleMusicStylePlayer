@@ -11,6 +11,8 @@ import SwiftUI
 struct MediaListView: View {
     @Environment(PlayListController.self) var model
     @Environment(\.nowPlayingExpandProgress) var expandProgress
+    @Environment(NowPlayingController.self) var player
+    @Environment(\.expandNowPlaying) var expandNowPlaying
 
     var body: some View {
         NavigationStack {
@@ -81,7 +83,8 @@ private extension MediaListView {
     var buttons: some View {
         HStack(spacing: 16) {
             Button {
-                print("Play")
+                player.onPlayPause()
+                expandNowPlaying()
             }
             label: {
                 Label("Play", systemImage: "play.fill")
