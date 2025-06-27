@@ -22,6 +22,7 @@ extension MockGTA5Radio {
                     artwork: stationImageUrl(String($0.logo.split(separator: ".")[0])),
                     title: $0.title,
                     subtitle: $0.genre,
+                    url: URL(string: "https://example.com")!,
                     online: false
                 )
             }

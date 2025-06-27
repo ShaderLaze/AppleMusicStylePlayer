@@ -11,6 +11,7 @@ import SwiftUI
 struct MediaListView: View {
     @Environment(PlayListController.self) var model
     @Environment(\.nowPlayingExpandProgress) var expandProgress
+    @State private var showImporter = false
 
     var body: some View {
         NavigationStack {
@@ -21,6 +22,15 @@ struct MediaListView: View {
             .contentMargins(.bottom, ViewConst.tabbarHeight, for: .scrollIndicators)
             .background(Color(.palette.appBackground(expandProgress: expandProgress)))
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        showImporter = true
+                    } label: {
+                        Image(systemName: "plus")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundStyle(Color(.palette.brand))
+                    }
+                }
                 Button {
                     print("Profile tapped")
                 }
@@ -28,6 +38,11 @@ struct MediaListView: View {
                     Image(systemName: "person.crop.circle")
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(Color(.palette.brand))
+                }
+            }
+            .sheet(isPresented: $showImporter) {
+                AudioImporter { urls in
+                    model.addTracks(urls: urls)
                 }
             }
         }

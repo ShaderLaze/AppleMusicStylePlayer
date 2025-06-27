@@ -32,6 +32,11 @@ class PlayListController {
     func selectFirstAvailable() {
         current = library.list.first { !$0.items.isEmpty }
     }
+
+    func addTracks(urls: [URL]) {
+        library.importFiles(urls)
+        selectFirstAvailable()
+    }
 }
 
 private extension MediaList {
