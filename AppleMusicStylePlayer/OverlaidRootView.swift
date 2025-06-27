@@ -32,6 +32,10 @@ struct OverlaidRootView: View {
         }
         .environment(playerController)
         .environment(playlistController)
+        .environment(\.presentNowPlaying, {
+            showOverlayingNowPlayng = true
+            expandedNowPlaying = true
+        })
         .universalOverlay(animation: .none, show: $showOverlayingNowPlayng) {
             ExpandableNowPlaying(
                 show: $showOverlayingNowPlayng,
