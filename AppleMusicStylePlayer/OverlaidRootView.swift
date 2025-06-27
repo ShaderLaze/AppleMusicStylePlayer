@@ -32,6 +32,12 @@ struct OverlaidRootView: View {
         }
         .environment(playerController)
         .environment(playlistController)
+        .environment(\.expandNowPlaying) {
+            withAnimation(.playerExpandAnimation) {
+                showOverlayingNowPlayng = true
+                expandedNowPlaying = true
+            }
+        }
         .universalOverlay(animation: .none, show: $showOverlayingNowPlayng) {
             ExpandableNowPlaying(
                 show: $showOverlayingNowPlayng,
@@ -43,10 +49,6 @@ struct OverlaidRootView: View {
             }
         }
         .environment(\.nowPlayingExpandProgress, nowPlayingExpandProgress)
-        .environment(\.expandNowPlaying) {
-            showOverlayingNowPlayng = true
-            expandedNowPlaying = true
-        }
     }
 
     func showNowPlayng(replacement: Bool) {

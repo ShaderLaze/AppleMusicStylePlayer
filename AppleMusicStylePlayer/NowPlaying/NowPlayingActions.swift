@@ -3,7 +3,7 @@ import SwiftUI
 typealias ExpandNowPlayingAction = @MainActor () -> Void
 
 private struct ExpandNowPlayingKey: EnvironmentKey {
-    static let defaultValue: ExpandNowPlayingAction = {}
+    @MainActor static let defaultValue: ExpandNowPlayingAction = {}
 }
 
 extension EnvironmentValues {
