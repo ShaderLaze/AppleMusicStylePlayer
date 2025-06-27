@@ -149,6 +149,7 @@ private extension Media {
             artwork: nil,
             title: "---",
             subtitle: "---",
+            url: nil,
             online: false
         )
     }

@@ -5,14 +5,22 @@
 //  Created by Alexey Vorobyov on 30.11.2024.
 //
 
+import AVFoundation
 import Foundation
 
-class Player {
+final class Player {
+    private var player: AVPlayer?
+
     func play(_ media: Media) {
-        print("Play \(media.title)")
+        stop()
+        guard let url = media.url else { return }
+        let item = AVPlayerItem(url: url)
+        player = AVPlayer(playerItem: item)
+        player?.play()
     }
 
     func stop() {
-        print("Stop")
+        player?.pause()
+        player = nil
     }
 }

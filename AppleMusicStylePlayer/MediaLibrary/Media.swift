@@ -11,5 +11,6 @@ struct Media {
     let artwork: URL?
     let title: String
     let subtitle: String?
+    let url: URL?
     let online: Bool
 }

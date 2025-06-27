@@ -25,6 +25,7 @@ final class MediaLibrary {
                 artwork: nil,
                 title: url.deletingPathExtension().lastPathComponent,
                 subtitle: nil,
+                url: url,
                 online: false
             )
         }
