@@ -1,11 +1,13 @@
 import SwiftUI
 
+typealias ExpandNowPlayingAction = @MainActor () -> Void
+
 private struct ExpandNowPlayingKey: EnvironmentKey {
-    static let defaultValue: () -> Void = {}
+    static let defaultValue: ExpandNowPlayingAction = {}
 }
 
 extension EnvironmentValues {
-    var expandNowPlaying: () -> Void {
+    var expandNowPlaying: ExpandNowPlayingAction {
         get { self[ExpandNowPlayingKey.self] }
         set { self[ExpandNowPlayingKey.self] = newValue }
     }
