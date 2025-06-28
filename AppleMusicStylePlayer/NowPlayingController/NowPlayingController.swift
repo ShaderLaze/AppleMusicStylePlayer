@@ -66,48 +66,61 @@ class NowPlayingController {
         if state == .playing {
             player.play(currentMedia)
         } else {
-            player.stop()
+            player.pause()
         }
     }
 
     func onForward() {
         enshureMediaAvailable()
-        guard currentMedia != nil else { return }
+        guard !playList.items.isEmpty else { return }
 
-        guard let currentIndex else {
-            self.currentIndex = 0
-            return
-        }
-
-        var next = currentIndex + 1
-        if next >= playList.items.count {
+        let next: Int
+        if let currentIndex {
+            next = (currentIndex + 1) % playList.items.count
+        } else {
             next = 0
         }
+
         self.currentIndex = next
+        if state == .playing, let media = currentMedia {
+            player.play(media)
+        }
         updateColors()
     }
 
     func onBackward() {
         enshureMediaAvailable()
-        guard currentMedia != nil else { return }
+        guard !playList.items.isEmpty else { return }
 
         let lastIndex = playList.items.count - 1
-        guard let currentIndex else {
-            self.currentIndex = lastIndex
-            return
-        }
-
-        var prev = currentIndex - 1
-        if prev < 0 {
+        let prev: Int
+        if let currentIndex {
+            let candidate = currentIndex - 1
+            prev = candidate < 0 ? lastIndex : candidate
+        } else {
             prev = lastIndex
         }
+
         self.currentIndex = prev
+        if state == .playing, let media = currentMedia {
+            player.play(media)
+        }
         updateColors()
     }
 
     public func select(at index: Int) {
         guard playList.items.indices.contains(index) else { return }
         currentIndex = index
+        updateColors()
+    }
+
+    public func play(at index: Int) {
+        guard playList.items.indices.contains(index) else { return }
+        currentIndex = index
+        state = .playing
+        if let media = currentMedia {
+            player.play(media)
+        }
         updateColors()
     }
 }
