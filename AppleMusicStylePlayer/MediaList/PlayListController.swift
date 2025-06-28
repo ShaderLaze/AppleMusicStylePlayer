@@ -30,7 +30,7 @@ class PlayListController {
     }
 
     func selectFirstAvailable() {
-        current = library.list.first { !$0.items.isEmpty }
+        current = library.list.first { !$0.items.isEmpty } ?? current
     }
 }
 

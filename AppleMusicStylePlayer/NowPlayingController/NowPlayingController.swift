@@ -155,7 +155,8 @@ private extension Media {
             artwork: nil,
             title: "---",
             subtitle: "---",
-            online: false
+            online: false,
+            fileURL: nil
         )
     }
 }

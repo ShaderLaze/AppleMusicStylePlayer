@@ -12,6 +12,7 @@ struct MediaListView: View {
     @Environment(PlayListController.self) var model
     @Environment(NowPlayingController.self) var player
     @Environment(\.nowPlayingExpandProgress) var expandProgress
+    @State private var showPicker = false
 
     var body: some View {
         NavigationStack {
@@ -22,13 +23,28 @@ struct MediaListView: View {
             .contentMargins(.bottom, ViewConst.tabbarHeight, for: .scrollIndicators)
             .background(Color(.palette.appBackground(expandProgress: expandProgress)))
             .toolbar {
-                Button {
-                    print("Profile tapped")
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showPicker = true
+                    } label: {
+                        Image(systemName: "plus")
+                    }
                 }
-                label: {
-                    Image(systemName: "person.crop.circle")
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(Color(.palette.brand))
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        print("Profile tapped")
+                    } label: {
+                        Image(systemName: "person.crop.circle")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundStyle(Color(.palette.brand))
+                    }
+                }
+            }
+            .sheet(isPresented: $showPicker) {
+                FilePicker { urls in
+                    model.library.append(from: urls)
+                    model.selectFirstAvailable()
+                    showPicker = false
                 }
             }
         }

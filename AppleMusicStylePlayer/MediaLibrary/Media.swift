@@ -7,9 +7,10 @@
 
 import Foundation
 
-struct Media {
+struct Media: Codable {
     let artwork: URL?
     let title: String
     let subtitle: String?
     let online: Bool
+    let fileURL: URL?
 }
