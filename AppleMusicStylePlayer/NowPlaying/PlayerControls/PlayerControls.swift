@@ -19,7 +19,14 @@ struct PlayerControls: View {
                 VStack(spacing: spacing) {
                     trackInfo
                     let indicatorPadding = ViewConst.playerCardPaddings - ElasticSliderConfig.playbackProgress.growth
-                    TimingIndicator(spacing: spacing)
+                    TimingIndicator(
+                        spacing: spacing,
+                        progress: Binding(
+                            get: { model.progress },
+                            set: { model.seek(to: $0) }
+                        ),
+                        duration: model.duration
+                    )
                         .padding(.top, spacing)
                         .padding(.horizontal, indicatorPadding)
                 }

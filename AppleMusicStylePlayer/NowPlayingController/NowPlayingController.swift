@@ -7,6 +7,7 @@
 
 import Kingfisher
 import Observation
+import Combine
 import UIKit
 
 @MainActor
@@ -22,6 +23,9 @@ class NowPlayingController {
     private let playList: PlayListController
     private let player: Player
     var colors: [ColorFrequency] = []
+    var progress: Double = 0
+    var duration: Double = 0
+    private var progressCancellable: AnyCancellable?
 
     var currentMedia: Media? {
         guard let currentIndex else { return nil }
@@ -65,8 +69,11 @@ class NowPlayingController {
         state.toggle()
         if state == .playing {
             player.play(currentMedia)
+            duration = player.duration
+            startProgressUpdates()
         } else {
             player.pause()
+            stopProgressUpdates()
         }
     }
 
@@ -84,6 +91,8 @@ class NowPlayingController {
         self.currentIndex = next
         if state == .playing, let media = currentMedia {
             player.play(media)
+            duration = player.duration
+            startProgressUpdates()
         }
         updateColors()
     }
@@ -104,6 +113,8 @@ class NowPlayingController {
         self.currentIndex = prev
         if state == .playing, let media = currentMedia {
             player.play(media)
+            duration = player.duration
+            startProgressUpdates()
         }
         updateColors()
     }
@@ -120,8 +131,15 @@ class NowPlayingController {
         state = .playing
         if let media = currentMedia {
             player.play(media)
+            duration = player.duration
+            startProgressUpdates()
         }
         updateColors()
+    }
+
+    public func seek(to time: Double) {
+        player.currentTime = time
+        progress = time
     }
 }
 
@@ -141,6 +159,7 @@ private extension NowPlayingController {
     func stopPlaying() {
         state = .paused
         player.stop()
+        stopProgressUpdates()
     }
 
     func updateColors() {
@@ -150,6 +169,25 @@ private extension NowPlayingController {
                 self.colors = (image.dominantColorFrequencies(with: .high) ?? [])
             }
         }
+    }
+
+    func startProgressUpdates() {
+        progress = player.currentTime
+        duration = player.duration
+        progressCancellable?.cancel()
+        progressCancellable = Timer
+            .publish(every: 0.5, on: .main, in: .common)
+            .autoconnect()
+            .sink { [weak self] _ in
+                guard let self else { return }
+                self.progress = self.player.currentTime
+                self.duration = self.player.duration
+            }
+    }
+
+    func stopProgressUpdates() {
+        progressCancellable?.cancel()
+        progressCancellable = nil
     }
 }
 
