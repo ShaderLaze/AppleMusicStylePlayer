@@ -62,11 +62,17 @@ class NowPlayingController {
     func onPlayPause() {
         enshureMediaAvailable()
         guard let currentMedia else { return }
-        state.toggle()
-        if state == .playing {
+        switch state {
+        case .playing:
+            state = .paused
+            if currentMedia.online {
+                player.stop()
+            } else {
+                player.pause()
+            }
+        case .paused:
+            state = .playing
             player.play(currentMedia)
-        } else {
-            player.stop()
         }
     }
 
@@ -85,6 +91,9 @@ class NowPlayingController {
         }
         self.currentIndex = next
         updateColors()
+        if state == .playing, let media = currentMedia {
+            player.play(media)
+        }
     }
 
     func onBackward() {
@@ -103,6 +112,9 @@ class NowPlayingController {
         }
         self.currentIndex = prev
         updateColors()
+        if state == .playing, let media = currentMedia {
+            player.play(media)
+        }
     }
 
     public func select(at index: Int) {
