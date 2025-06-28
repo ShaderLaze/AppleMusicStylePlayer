@@ -104,6 +104,12 @@ class NowPlayingController {
         self.currentIndex = prev
         updateColors()
     }
+
+    public func select(at index: Int) {
+        guard playList.items.indices.contains(index) else { return }
+        currentIndex = index
+        updateColors()
+    }
 }
 
 private extension NowPlayingController {

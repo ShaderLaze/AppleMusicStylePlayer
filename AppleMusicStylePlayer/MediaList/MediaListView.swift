@@ -10,6 +10,7 @@ import SwiftUI
 
 struct MediaListView: View {
     @Environment(PlayListController.self) var model
+    @Environment(NowPlayingController.self) var player
     @Environment(\.nowPlayingExpandProgress) var expandProgress
 
     var body: some View {
@@ -115,6 +116,9 @@ private extension MediaListView {
                     )
                 }
                 .padding(.leading, ViewConst.screenPaddings)
+                .onTapGesture {
+                    player.select(at: offset)
+                }
             }
         }
     }
