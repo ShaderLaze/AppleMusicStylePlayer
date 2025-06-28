@@ -12,6 +12,7 @@ struct MediaListView: View {
     @Environment(PlayListController.self) var model
     @Environment(NowPlayingController.self) var player
     @Environment(\.nowPlayingExpandProgress) var expandProgress
+    @State private var showPicker = false
 
     var body: some View {
         NavigationStack {
@@ -30,6 +31,17 @@ struct MediaListView: View {
                         .font(.system(size: 20, weight: .semibold))
                         .foregroundStyle(Color(.palette.brand))
                 }
+
+                Button("Add Track") {
+                    showPicker = true
+                }
+            }
+        }
+        .sheet(isPresented: $showPicker) {
+            DocumentPicker { urls in
+                model.library.appendMedia(from: urls)
+                model.selectFirstAvailable()
+                showPicker = false
             }
         }
     }

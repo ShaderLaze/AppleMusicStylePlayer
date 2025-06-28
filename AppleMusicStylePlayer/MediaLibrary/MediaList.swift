@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MediaList {
+struct MediaList: Codable {
     let artwork: URL?
     let title: String
     let subtitle: String?
