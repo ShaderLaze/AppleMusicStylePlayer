@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct TimingIndicator: View {
+    @Environment(NowPlayingController.self) private var model
     let spacing: CGFloat
-    @State var progress: Double = 60
-    let range = 0.0 ... 194
+    @State private var dragTime: Double?
 
     var body: some View {
         ElasticSlider(
-            value: $progress,
-            in: range,
+            value: sliderBinding,
+            in: sliderRange,
+            onEditingChanged: editingChanged,
             leadingLabel: {
                 label(leadingLabelText)
             },
@@ -37,15 +38,41 @@ private extension TimingIndicator {
     }
 
     var leadingLabelText: String {
-        progress.asTimeString(style: .positional)
+        displayedProgress.asTimeString(style: .positional)
     }
 
     var trailingLabelText: String {
-        ((range.upperBound - progress) * -1.0).asTimeString(style: .positional)
+        ((sliderRange.upperBound - displayedProgress) * -1.0).asTimeString(style: .positional)
     }
 
     var palette: Palette.PlayerCard.Type {
         UIColor.palette.playerCard.self
+    }
+
+    var sliderRange: ClosedRange<Double> {
+        0 ... max(model.duration, 0)
+    }
+
+    var displayedProgress: Double {
+        dragTime ?? model.currentTime
+    }
+
+    var sliderBinding: Binding<Double> {
+        Binding(
+            get: { displayedProgress },
+            set: { dragTime = $0 }
+        )
+    }
+
+    func editingChanged(_ active: Bool) {
+        if !active {
+            if let dragTime {
+                model.seek(to: dragTime)
+            }
+            dragTime = nil
+        } else {
+            dragTime = model.currentTime
+        }
     }
 }
 
