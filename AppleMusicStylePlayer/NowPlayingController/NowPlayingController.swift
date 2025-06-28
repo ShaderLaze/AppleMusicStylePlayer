@@ -18,7 +18,7 @@ class NowPlayingController {
     }
 
     var state: State = .paused
-    var currentIndex: Int? = 1
+    var currentIndex: Int? = nil
     private let playList: PlayListController
     private let player: Player
     var colors: [ColorFrequency] = []
@@ -116,6 +116,9 @@ private extension NowPlayingController {
     func enshureMediaAvailable() {
         if playList.items.isEmpty {
             selectFirstAvailableMedia()
+        } else if currentMedia == nil {
+            currentIndex = 0
+            updateColors()
         }
     }
 
