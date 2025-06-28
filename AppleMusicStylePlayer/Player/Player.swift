@@ -11,6 +11,15 @@ import Foundation
 class Player {
     private var player: AVAudioPlayer?
 
+    init() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print("Audio session error: \(error)")
+        }
+    }
+
     func play(_ media: Media) {
         stop()
         guard let url = media.fileURL else {
