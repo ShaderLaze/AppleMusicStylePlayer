@@ -23,6 +23,9 @@ class NowPlayingController {
     private let player: Player
     var colors: [ColorFrequency] = []
 
+    var currentTime: TimeInterval { player.currentTime }
+    var duration: TimeInterval { player.duration }
+
     var currentMedia: Media? {
         guard let currentIndex else { return nil }
         return playList.items[safe: currentIndex]
@@ -68,6 +71,10 @@ class NowPlayingController {
         } else {
             player.pause()
         }
+    }
+
+    func seek(to time: TimeInterval) {
+        player.seek(to: time)
     }
 
     func onForward() {

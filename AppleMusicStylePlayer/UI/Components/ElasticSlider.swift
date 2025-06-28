@@ -17,18 +17,21 @@ struct ElasticSlider<LeadingContent: View, TrailingContent: View>: View {
     @State private var stretchingValue: CGFloat = 0
     @State private var viewSize: CGSize = .zero
     @GestureState private var isActive: Bool = false
+    private let onEditingChanged: (Bool) -> Void
 
     init(
         value: Binding<Double>,
         in range: ClosedRange<Double>,
         leadingLabel: (() -> LeadingContent)? = nil,
-        trailingLabel: (() -> TrailingContent)? = nil
+        trailingLabel: (() -> TrailingContent)? = nil,
+        onEditingChanged: @escaping (Bool) -> Void = { _ in }
     ) {
         _value = value
         self.range = range
         lastStoredValue = value.wrappedValue
         self.leadingLabel = leadingLabel?()
         self.trailingLabel = trailingLabel?()
+        self.onEditingChanged = onEditingChanged
     }
 
     var body: some View {
@@ -151,6 +154,9 @@ private extension ElasticSlider {
                         stretchingValue = 0
                     }
             )
+            .onChange(of: isActive) { editing in
+                onEditingChanged(editing)
+            }
         }
         .frame(
             height: max(0, isActive
@@ -198,13 +204,15 @@ extension ElasticSlider where LeadingContent == EmptyView {
     init(
         value: Binding<Double>,
         in range: ClosedRange<Double>,
-        trailingLabel: (() -> TrailingContent)? = nil
+        trailingLabel: (() -> TrailingContent)? = nil,
+        onEditingChanged: @escaping (Bool) -> Void = { _ in }
     ) {
         _value = value
         self.range = range
         lastStoredValue = value.wrappedValue
         leadingLabel = nil
         self.trailingLabel = trailingLabel?()
+        self.onEditingChanged = onEditingChanged
     }
 }
 
@@ -213,13 +221,15 @@ extension ElasticSlider where TrailingContent == EmptyView {
         value: Binding<Double>,
         in range: ClosedRange<Double>,
         config _: ElasticSliderConfig = .init(),
-        leadingLabel: (() -> LeadingContent)? = nil
+        leadingLabel: (() -> LeadingContent)? = nil,
+        onEditingChanged: @escaping (Bool) -> Void = { _ in }
     ) {
         _value = value
         self.range = range
         lastStoredValue = value.wrappedValue
         self.leadingLabel = leadingLabel?()
         trailingLabel = nil
+        self.onEditingChanged = onEditingChanged
     }
 }
 
@@ -227,13 +237,15 @@ extension ElasticSlider where LeadingContent == EmptyView, TrailingContent == Em
     init(
         value: Binding<Double>,
         in range: ClosedRange<Double>,
-        config _: ElasticSliderConfig = .init()
+        config _: ElasticSliderConfig = .init(),
+        onEditingChanged: @escaping (Bool) -> Void = { _ in }
     ) {
         _value = value
         self.range = range
         lastStoredValue = value.wrappedValue
         leadingLabel = nil
         trailingLabel = nil
+        self.onEditingChanged = onEditingChanged
     }
 }
 
