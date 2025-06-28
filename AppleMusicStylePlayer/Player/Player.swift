@@ -56,4 +56,16 @@ class Player {
         player = nil
         currentURL = nil
     }
+
+    var currentTime: TimeInterval {
+        get { player?.currentTime ?? storedTime }
+        set {
+            storedTime = newValue
+            player?.currentTime = newValue
+        }
+    }
+
+    var duration: TimeInterval {
+        player?.duration ?? 0
+    }
 }

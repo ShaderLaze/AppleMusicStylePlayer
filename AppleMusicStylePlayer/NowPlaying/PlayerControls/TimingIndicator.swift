@@ -9,8 +9,10 @@ import SwiftUI
 
 struct TimingIndicator: View {
     let spacing: CGFloat
-    @State var progress: Double = 60
-    let range = 0.0 ... 194
+    @Binding var progress: Double
+    let duration: Double
+
+    private var range: ClosedRange<Double> { 0 ... duration }
 
     var body: some View {
         ElasticSlider(
@@ -64,10 +66,15 @@ extension ElasticSliderConfig {
 }
 
 #Preview {
+    @State var progress: Double = 60
     ZStack {
         PreviewBackground()
-        TimingIndicator(spacing: 10)
-            .padding(.horizontal)
+        TimingIndicator(
+            spacing: 10,
+            progress: $progress,
+            duration: 194
+        )
+        .padding(.horizontal)
     }
 }
 
