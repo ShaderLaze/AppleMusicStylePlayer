@@ -110,6 +110,16 @@ class NowPlayingController {
         currentIndex = index
         updateColors()
     }
+
+    public func play(at index: Int) {
+        guard playList.items.indices.contains(index) else { return }
+        currentIndex = index
+        state = .playing
+        if let media = currentMedia {
+            player.play(media)
+        }
+        updateColors()
+    }
 }
 
 private extension NowPlayingController {

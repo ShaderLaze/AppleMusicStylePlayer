@@ -5,14 +5,29 @@
 //  Created by Alexey Vorobyov on 30.11.2024.
 //
 
+import AVFoundation
 import Foundation
 
 class Player {
+    private var player: AVAudioPlayer?
+
     func play(_ media: Media) {
-        print("Play \(media.title)")
+        stop()
+        guard let url = media.fileURL else {
+            print("No file for \(media.title)")
+            return
+        }
+        do {
+            player = try AVAudioPlayer(contentsOf: url)
+            player?.prepareToPlay()
+            player?.play()
+        } catch {
+            print("Failed to play \(media.title): \(error)")
+        }
     }
 
     func stop() {
-        print("Stop")
+        player?.stop()
+        player = nil
     }
 }

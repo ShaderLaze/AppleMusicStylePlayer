@@ -133,7 +133,7 @@ private extension MediaListView {
                 }
                 .padding(.leading, ViewConst.screenPaddings)
                 .onTapGesture {
-                    player.select(at: offset)
+                    player.play(at: offset)
                 }
             }
         }
